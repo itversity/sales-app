@@ -1,0 +1,6 @@
+wheel==0.40.0
+Flask==2.2.3
+Flask-SQLAlchemy==3.0.3
+Flask-Bootstrap==3.3.7.1
+psycopg2-binary==2.9.6
+gunicorn==20.1.0

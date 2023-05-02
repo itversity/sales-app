@@ -1,0 +1,33 @@
+services:
+  salesdemo:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "5000:5000"
+    volumes:
+      - ".:/app"
+    networks:
+      - sales_nw
+    environment:
+      SALES_DB_HOST: $SALES_DB_HOST
+      SALES_DB_PORT: $SALES_DB_PORT
+      SALES_DB_NAME: $SALES_DB_NAME
+      SALES_DB_USER: $SALES_DB_USER
+      SALES_DB_PASS: $SALES_DB_PASS
+    depends_on:
+      - "saleshost"
+  saleshost:
+    image: postgres:15
+    ports:
+      - "5433:5432"
+    volumes:
+      - ./db_scripts:/docker-entrypoint-initdb.d
+      - ./saleshost_vol:/var/lib/postgresql/data
+    networks:
+      - sales_nw
+    environment:
+      POSTGRES_PASSWORD: itversity
+networks:
+  sales_nw:
+    name: sales_nw
