@@ -1,4 +1,5 @@
 import os
+import logging
 from flask import Flask, render_template, request, \
     redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
@@ -14,6 +15,8 @@ user = os.environ.get('SALES_DB_USER')
 password = os.environ.get('SALES_DB_PASS')
 app.config["SQLALCHEMY_DATABASE_URI"] = f'postgresql://{user}:{password}@{host}:{port}/{db_name}'
 db.init_app(app)
+
+
 from models.user import User
 
 @app.route('/')
@@ -31,27 +34,44 @@ def users():
 
 @app.route('/user', methods=['GET', 'POST'])
 def user():
-    id = request.args.get('id')
-    app.logger.info(f'Invoking user function using {request.method}')
     if request.method == 'GET':
+        id = request.args.get('id')
         if id:
             user = User.query.get(id)
             return render_template('user_detail.html', user=user)
         else:
             return render_template('user_form.html')
     elif request.method == 'POST':
-        first_name = request.form['first_name']
-        last_name = request.form['last_name']
-        username = request.form['username']
-        email = request.form['email']
-        user = User(
-            first_name=first_name, 
-            last_name=last_name, 
-            username=username,
-            email=email
-        )
-        db.session.add(user)
-        db.session.commit()
-        return redirect(url_for('users'))
+        id = request.args.get('id')
+        if id:
+            user = User.query.get(id)
+            return render_template('user_form.html', user=user)
+        else:
+            id = request.form['id']
+            first_name = request.form['first_name']
+            last_name = request.form['last_name']
+            username = request.form['username']
+            email = request.form['email']
+            if id:
+                user = User.query.get(id)
+                user.first_name = first_name
+                user.last_name = last_name
+                user.username = username
+                user.email = email
+            else:
+                user = User(
+                    first_name=first_name, 
+                    last_name=last_name, 
+                    username=username,
+                    email=email
+                )
+                db.session.add(user)
+            db.session.commit()
+            return redirect(url_for('users'))
 
         
+if __name__ != '__main__':
+    # if we are not running directly, we set the loggers
+    gunicorn_logger = logging.getLogger('gunicorn.error')
+    app.logger.handlers = gunicorn_logger.handlers
+    app.logger.setLevel(gunicorn_logger.level)
