@@ -1,0 +1,25 @@
+{%- extends "base.html" %}
+
+ {% block content %}
+    <h3>Courses Dashboard</h3>
+    <table id="data" class="table table-striped">
+        <thead>
+            <tr>
+                <th>Course Id</th>
+                <th>Course Name</th>
+                <th>Course Author</th>
+                <th>Course Endpoint</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for course in courses %}
+            <tr>
+                <td>{{ course.course_id }}</td>
+                <td>{{ course.course_name }}</td>
+                <td>{{ course.course_author }}</td>
+                <td>{{ course.course_endpoint }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+ {%- endblock %}
