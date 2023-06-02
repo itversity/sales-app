@@ -22,7 +22,7 @@ from models.course import Course
 
 @app.route('/')
 def hello_world():
-    rec = db.get_or_404(User, 1)
+    rec = db.get_or_404(Course, 1)
     return render_template('index.html', user=rec)
 
 
@@ -48,7 +48,7 @@ def user():
             user = User.query.get(id)
             return render_template('user_detail.html', user=user)
         else:
-            return render_template('user_form.html')
+            return render_template('user_form.html', user=None)
     elif request.method == 'POST':
         id = request.args.get('id')
         if id:
@@ -76,6 +76,41 @@ def user():
                 db.session.add(user)
             db.session.commit()
             return redirect(url_for('users'))
+
+
+@app.route('/course', methods=['GET', 'POST'])
+def course():
+    if request.method == 'GET':
+        course_id = request.args.get('course_id')
+        if course_id:
+            course = Course.query.get(course_id)
+            return render_template('course_detail.html', course=course)
+        else:
+            return render_template('course_form.html', course=None)
+    elif request.method == 'POST':
+        course_id = request.args.get('course_id')
+        if course_id:
+            course = Course.query.get(course_id)
+            return render_template('course_form.html', course=course)
+        else:
+            course_id = request.form['course_id']
+            course_name = request.form['course_name']
+            course_author = request.form['course_author']
+            course_endpoint = request.form['course_endpoint']
+            if course_id:
+                course = Course.query.get(course_id)
+                course.course_name = course_name
+                course.course_author = course_author
+                course.course_endpoint = course_endpoint
+            else:
+                course = Course(
+                    course_name=course_name, 
+                    course_author=course_author, 
+                    course_endpoint=course_endpoint
+                )
+                db.session.add(course)
+            db.session.commit()
+            return redirect(url_for('courses'))
 
         
 if __name__ != '__main__':
