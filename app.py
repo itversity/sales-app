@@ -97,7 +97,13 @@ def course():
         course_id = request.args.get('course_id')
         if course_id:
             course = Course.query.get(course_id)
-            return render_template('course_form.html', course=course)
+            form_action = request.form['action']
+            if form_action == 'edit':
+                return render_template('course_form.html', course=course)
+            elif form_action == 'delete':
+                db.session.delete(course)
+                db.session.commit()
+                return redirect(url_for('courses'))
         else:
             course_id = request.form['course_id']
             course_name = request.form['course_name']
