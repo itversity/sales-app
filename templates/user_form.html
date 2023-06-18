@@ -1,6 +1,6 @@
 {%- extends "base.html" %} {% block content %}
 <h3>User Form</h3>
-<form method="POST" action="{{ url_for('user') }}">
+<form method="POST" action="{{ url_for('user', user=user) }}">
     <input type="text" name="id" value="{{ user.id }}" hidden /> 
     <label for="first_name"><b>First Name</b></label>
     <input type="text" placeholder="Enter First Name" name="first_name" value="{{ user.first_name}}"/>

@@ -1,7 +1,11 @@
 {%- extends "base.html" %}
 
- {% block content %}
+{% block content %}
     <h3>Users Dashboard</h3>
+    <form method="GET" action="{{ url_for('users') }}">
+        <input type="text" name="search_email" placeholder="Enter email id">
+        <button type="submit">Search</button>
+    </form>
     <table id="data" class="table table-striped">
         <thead>
             <tr>
@@ -24,4 +28,4 @@
             {% endfor %}
         </tbody>
     </table>
- {%- endblock %}
+{% endblock %}

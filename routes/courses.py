@@ -1,5 +1,5 @@
 from flask import render_template, request, \
-    redirect, url_for
+    redirect, url_for, jsonify
 from app import app
 from app import db
 from models.course import Course
@@ -9,7 +9,13 @@ from models.course import Course
 def courses():
     course_recs = db.session.query(Course).all()
     courses = list(map(lambda rec: rec.__dict__, course_recs))
+    # courses_list = map(lambda rec: rec.__dict__, course_recs)
+    # courses = []
+    # for course in courses_list:
+    #     course.pop('_sa_instance_state')
+    #     courses.append(course)
     return render_template('courses.html', courses=courses)
+    # return jsonify({'courses': courses})
 
 
 @app.route('/course', methods=['GET', 'POST'])

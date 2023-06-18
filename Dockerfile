@@ -12,4 +12,5 @@ COPY requirements.txt /
 RUN pip install -r requirements.txt
 
 WORKDIR /app
-ENTRYPOINT ["gunicorn", "--chdir", "/app", "-w", "2", "--threads", "2", "-b", "0.0.0.0:5000", "app:app"]
+# ENTRYPOINT ["gunicorn", "--chdir", "/app", "-w", "2", "--threads", "2", "-b", "0.0.0.0:5000", "app:app"]
+ENTRYPOINT ["flask", "run", "--debug", "-h", "0.0.0.0"]
