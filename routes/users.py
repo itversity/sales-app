@@ -17,6 +17,14 @@ def users():
     return render_template('users.html', users=users)
 
 
+@app.route('/user', methods=['DELETE'])
+def delete_user():
+    id = request.args.get('id')
+    user = User.query.get(id)
+    db.session.delete(user)
+    db.session.commit()
+    return f'User {user.id} is successfully deleted'
+
 
 @app.route('/user', methods=['GET', 'POST'])
 def user():
