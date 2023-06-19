@@ -9,15 +9,22 @@
                 <th>Course Name</th>
                 <th>Course Author</th>
                 <th>Course Endpoint</th>
+                <th>Action</th>
             </tr>
         </thead>
         <tbody>
             {% for course in courses %}
             <tr>
-                <td>{{ course.course_id }}</td>
+                <td><a href="{{ url_for('course', course_id=course.course_id) }}">{{ course.course_id }}</a></td>
                 <td>{{ course.course_name }}</td>
                 <td>{{ course.course_author }}</td>
                 <td>{{ course.course_endpoint }}</td>
+                <td>
+                    <form method="GET" action="{{ url_for('course') }}">
+                        <input type="text" name="course_id" value="{{ course.course_id }}" hidden /> 
+                        <button type="submit" name="action" value="edit">Edit</button>
+                    </form>
+                </td>
             </tr>
             {% endfor %}
         </tbody>

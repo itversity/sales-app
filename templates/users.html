@@ -14,16 +14,23 @@
                 <th>Last Name</th>
                 <th>Username</th>
                 <th>Email</th>
+                <th>Action</th>
             </tr>
         </thead>
         <tbody>
             {% for user in users %}
             <tr>
-                <td>{{ user.id }}</td>
+                <td><a href="{{ url_for('user', id=user.id) }}">{{ user.id }}</a></td>
                 <td>{{ user.first_name }}</td>
                 <td>{{ user.last_name }}</td>
                 <td>{{ user.username }}</td>
                 <td>{{ user.email }}</td>
+                <td>
+                    <form method="GET" action="{{ url_for('user') }}">
+                        <input type="text" name="id" value="{{ user.id }}" hidden /> 
+                        <button type="submit" name="action" value="edit">Edit</button>
+                    </form>
+                </td>
             </tr>
             {% endfor %}
         </tbody>
